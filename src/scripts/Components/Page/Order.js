@@ -5,6 +5,14 @@ const React       = require('react');
 const Store       = require('../../Store');
 const NewPizza    = require('../Block/NewPizza');
 
+//  -------------------------------- styles
+const StyleOrder =
+  { margin: '20px'
+  , minWidth: '400px'
+  };
+//  --------------------------------
+
+
 const Order = React.createClass({
   getInitialState()
     { return Store.getState().toJS(); }
@@ -26,10 +34,31 @@ const Order = React.createClass({
   /* eslint-enable react/no-set-state */
 
   render() {
+    let { newPizza, pizzaSizes }
+      = this.state;
+
+    let content;
+
+    if(pizzaSizes.length < 1){
+      content = (
+        <div>
+          {'No pizza data given yet.'}
+        </div>
+      );
+    }
+    else {
+      content = (
+        <NewPizza
+          newPizza={newPizza}
+          pizzaSizes={pizzaSizes}
+        />
+      );
+    }
+
     return (
-      <div>
-        {'Hello Waldo'}
-        <NewPizza pizzaSizes={this.state.pizzaSizes} />
+      <div style={StyleOrder}>
+        {'Pizzaria Don Waldo'}
+        {content}
       </div>
     );
   }
