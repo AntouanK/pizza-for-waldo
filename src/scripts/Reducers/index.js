@@ -1,18 +1,26 @@
 
 'use strict';
 
-const types = require('../Constants').Types;
+const Consologger   = require('consologger');
+const logger        = new Consologger();
 
-const reducer
+//  only for dev, add a logger middleware
+const loggerMiddleware
   = (state, action) => {
-    if(action.type === types.FETCH_PIZZA_DATA_SUCCESS) {
-      let newState = state.set('pizzaSizes', action.data.pizzaSizes);
-      return newState;
-    }
+    logger
+    .grey((new Date()).toISOString())
+    .grey(' | ')
+    .blue('action')
+    .print();
+    console.log(action);
+
     return state;
   };
 
 const reducers =
-  [reducer];
+  [ loggerMiddleware
+  , require('./fetchPizzaData')
+  , require('./selectNewPizzaSize')
+  ];
 
 module.exports = reducers;

@@ -40,16 +40,19 @@ const Store =
       }
     );
 
+//  connect the actions coming from the dispatcher with the Store
 appDispatcher.register(actionHandler.bind(Store));
 
 //  on dev, add a logger for every action
 Store.addChangeListener
   (() => {
     logger
-    .grey(`${new Date()} | state`)
+    .grey((new Date()).toISOString())
+    .grey(' | ')
+    .blue('state')
     .print();
 
-    console.log(Store.getState());
+    console.log(Store.getState().toJS());
   });
 
 module.exports = Store;

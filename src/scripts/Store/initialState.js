@@ -9,6 +9,7 @@ const initialState
       , cart:
         { items: []
         }
+      , newPizza: {}
       }
     );
 

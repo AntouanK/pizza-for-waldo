@@ -2,29 +2,34 @@
 'use strict';
 
 const React       = require('react');
-const Immutable   = require('immutable');
 const Store       = require('../../Store');
+const NewPizza    = require('../Block/NewPizza');
 
 const Order = React.createClass({
+  getInitialState()
+    { return Store.getState().toJS(); }
+    ,
 
-  componentDidMount() { Store.addChangeListener(this._onChange); },
+  componentDidMount()
+    { Store.addChangeListener(this._onChange); }
+    ,
 
-  componentWillUnmount() { Store.removeChangeListener(this._onChange); },
+  componentWillUnmount()
+    { Store.removeChangeListener(this._onChange); }
+    ,
 
   /* eslint-disable react/no-set-state */
   /* only the top level components can have state ( the one of the Store ) */
-  _onChange() { this.setState(Store.getState().toJS()); },
+  _onChange()
+    { this.setState(Store.getState().toJS()); }
+    ,
   /* eslint-enable react/no-set-state */
 
   render() {
-
-    console.log('<Order> state');
-    console.log(this.state);
-    Immutable;
-
     return (
       <div>
         {'Hello Waldo'}
+        <NewPizza pizzaSizes={this.state.pizzaSizes} />
       </div>
     );
   }
