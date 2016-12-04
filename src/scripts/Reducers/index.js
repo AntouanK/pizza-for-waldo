@@ -21,6 +21,7 @@ const reducers =
   [ loggerMiddleware
   , require('./fetchPizzaData')
   , require('./selectNewPizzaSize')
+  , require('./selectNewTopping')
   ];
 
 module.exports = reducers;

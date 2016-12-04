@@ -13,14 +13,16 @@ const logger        = new Consologger();
 
 const actionHandler
   = function(action) {
-      let originalState = this.state;
 
-      reducers
-      .forEach(reducer =>
-        this.state = reducer(this.state, action)
-      );
+      let newState =
+        reducers
+        .reduce
+          ( (prevState, reducer) => reducer(prevState, action)
+          , this.state
+          );
 
-      if(this.state !== originalState){
+      if(this.state !== newState){
+        this.state = newState;
         //  state changed, so emit change
         this.emitChange();
       }

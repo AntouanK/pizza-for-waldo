@@ -3,6 +3,18 @@
 
 const React = require('react');
 
+
+//  -------------------------------- styles
+const StyleLabel =
+  { fontSize: '1.2em'
+  , padding: '0 4px'
+  , userSelect: 'none'
+  , WebkitUserSelect: 'none'
+  , cursor: 'pointer'
+  };
+//  --------------------------------
+
+
 const CheckBox = React.createClass({
   propTypes:
     { checked: React.PropTypes.bool
@@ -16,7 +28,9 @@ const CheckBox = React.createClass({
 
     return (
       <label>
-        {this.props.label}
+        <span style={StyleLabel}>
+          {this.props.label}
+        </span>
         <input
           checked={checked}
           onChange={this.props.onChange}
