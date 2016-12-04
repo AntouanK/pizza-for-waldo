@@ -7,8 +7,10 @@ const NewPizza    = require('../Block/NewPizza');
 
 //  -------------------------------- styles
 const StyleOrder =
-  { margin: '20px'
+  { flex: '1 0 auto'
+  , margin: '20px'
   , minWidth: '400px'
+  , maxWidth: '900px'
   };
 //  --------------------------------
 

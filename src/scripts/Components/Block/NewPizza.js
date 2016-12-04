@@ -23,6 +23,10 @@ const StyleCheckboxesSection =
   , flexWrap: 'wrap'
   , lineHeight: '2em'
   };
+const StyleSection =
+  { display: 'flex'
+  , alignItems: 'center'
+  };
 //  --------------------------------
 
 
@@ -38,13 +42,14 @@ const NewPizza = React.createClass({
     let { newPizza, pizzaSizes } = this.props;
     let newPizzaContent = [];
 
+    //  ------------------------------------------------  size section
     let sizeElements =
       pizzaSizes
       .map(pizzaSize =>
         <CheckBox
           checked={newPizza.name === pizzaSize.name}
           key={pizzaSize.name}
-          label={pizzaSize.name}
+          label={`${pizzaSize.name} (${pizzaSize.basePrice}$)`}
           onChange={function() { selectNewPizzaSize(pizzaSize.name); }}
         />
       );
@@ -52,7 +57,7 @@ const NewPizza = React.createClass({
     let sizeSection = (
       <div
         key='sizeSection'
-        style={{ display: 'flex' }}
+        style={StyleSection}
       >
         <div style={StyleSectionLabel}>
           {'Select size:'}
@@ -65,8 +70,10 @@ const NewPizza = React.createClass({
 
     //  add that section in the content
     newPizzaContent.push(sizeSection);
+    //  ------------------------------------------------  size section /
 
     if(newPizza.name !== undefined){
+      //  ----------------------------------------------  toppings section
       let toppingsElements =
         pizzaSizes
         //  keep only the size we selected
@@ -96,7 +103,7 @@ const NewPizza = React.createClass({
             <CheckBox
               checked={isChecked}
               key={topping.name}
-              label={`${topping.name}  ${topping.price.toFixed(2)}$`}
+              label={`${topping.name} (${topping.price.toFixed(2)}$)`}
               onChange={changeHandler}
             />
           );
@@ -105,7 +112,7 @@ const NewPizza = React.createClass({
       let toppingsSection = (
         <div
           key='toppingsSection'
-          style={{ display: 'flex' }}
+          style={StyleSection}
         >
           <div style={StyleSectionLabel}>
             {'Select toppings:'}
@@ -119,6 +126,56 @@ const NewPizza = React.createClass({
       //  add a separator first
       newPizzaContent.push(<hr key='toppings-separator' />);
       newPizzaContent.push(toppingsSection);
+      //  ----------------------------------------------  toppings section /
+
+      //  ----------------------------------------------  price section
+      let price
+        = newPizza.basePrice
+        + pizzaSizes
+          //  get the toppings for our size
+          .filter(size => size.name === newPizza.name)
+          .pop()
+          .toppings
+          .map(toppingWrapper => toppingWrapper.topping)
+          //  keep only the ones selected
+          .filter(
+            topping => newPizza.toppingsSelected.indexOf(topping.name) > -1
+          )
+          // pluck the prices
+          .map(topping => topping.price)
+          .reduce
+          ( (total, thisPrice) => total + thisPrice
+          , 0
+          );
+
+      let priceSection = (
+        <div
+          key='priceSection'
+          style={StyleSection}
+        >
+          <div style={StyleSectionLabel}>
+            {'Price:'}
+          </div>
+          <div style={{ fontSize: '1.4em', lineHeight: '2em' }}>
+            {`${price.toFixed(2)} $`}
+          </div>
+        </div>
+      );
+
+      //  add a separator first
+      newPizzaContent.push(<hr key='price-separator' />);
+      newPizzaContent.push(priceSection);
+      //  ----------------------------------------------  price section /
+
+      //  ----------------------------------------------  add-it section
+      let addItSection = (
+        <button>
+          {'add it to cart'}
+        </button>
+      );
+      newPizzaContent.push(<hr key='add-it-separator' />);
+      newPizzaContent.push(addItSection);
+      //  ----------------------------------------------  add-it section /
     }
 
     return (
