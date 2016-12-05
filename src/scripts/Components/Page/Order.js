@@ -4,10 +4,11 @@
 const React       = require('react');
 const Store       = require('../../Store');
 const NewPizza    = require('../Block/NewPizza');
+const Cart        = require('../Block/Cart');
 
 //  -------------------------------- styles
 const StyleOrder =
-  { flex: '1 0 auto'
+  { flex: '1'
   , margin: '20px'
   , minWidth: '400px'
   , maxWidth: '900px'
@@ -36,25 +37,39 @@ const Order = React.createClass({
   /* eslint-enable react/no-set-state */
 
   render() {
-    let { newPizza, pizzaSizes }
+    let { newPizza, pizzaSizes, cart }
       = this.state;
-
-    let content;
+    let content = [];
 
     if(pizzaSizes.length < 1){
-      content = (
-        <div>
+      content.push(
+        <div key='no-data-yet'>
           {'No pizza data given yet.'}
         </div>
       );
     }
     else {
-      content = (
+      let newPizzaContent = (
         <NewPizza
+          key='new-pizza'
           newPizza={newPizza}
           pizzaSizes={pizzaSizes}
         />
       );
+
+      content.push(newPizzaContent);
+    }
+
+    if(cart.items.length > 0){
+      let cartContent = (
+        <Cart
+          cart={cart}
+          key='cart'
+          pizzaSizes={pizzaSizes}
+        />
+      );
+
+      content.push(cartContent);
     }
 
     return (

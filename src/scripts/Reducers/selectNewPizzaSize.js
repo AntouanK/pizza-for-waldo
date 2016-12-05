@@ -1,8 +1,9 @@
 
 'use strict';
 
-const assign  = require('object-assign');
-const types   = require('../Constants').Types;
+const Immutable = require('immutable');
+const assign    = require('object-assign');
+const types     = require('../Constants').Types;
 
 
 const reducer
@@ -13,13 +14,13 @@ const reducer
         throw new Error('no proper size given from action');
       }
 
-      if(newSize === state.get('newPizza').name){
+      if(newSize === state.get('newPizza').toJS().name){
         //  if size is the same, do nothing
         return state;
         //  -------------------------------
       }
 
-      let pizzaSizes = state.get('pizzaSizes');
+      let pizzaSizes = state.get('pizzaSizes').toJS();
 
       let thisPizzaSize =
         pizzaSizes
@@ -35,7 +36,7 @@ const reducer
       let newPizza =
         assign
         ( {}
-        , state.get('newPizza')
+        , state.get('newPizza').toJS()
         , { name: newSize
           , basePrice
           , toppingsSelected:
@@ -46,7 +47,8 @@ const reducer
           }
         );
 
-      let newState = state.set('newPizza', newPizza);
+      let newState =
+        state.set('newPizza', Immutable.fromJS(newPizza));
 
       return newState;
     }

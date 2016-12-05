@@ -1,8 +1,9 @@
 
 'use strict';
 
-const assign  = require('object-assign');
-const types   = require('../Constants').Types;
+const Immutable = require('immutable');
+const assign    = require('object-assign');
+const types     = require('../Constants').Types;
 
 
 const reducer
@@ -14,7 +15,7 @@ const reducer
         throw new Error('no proper topping name given from action');
       }
 
-      let previousNewPizza = state.get('newPizza');
+      let previousNewPizza = state.get('newPizza').toJS();
 
       if(
         previousNewPizza
@@ -41,9 +42,11 @@ const reducer
         //  -------------------------------
       }
 
+      let pizzaSizes =
+        state.get('pizzaSizes').toJS();
+
       let thisPizzaSize =
-        state
-        .get('pizzaSizes')
+        pizzaSizes
         .filter(pizzaSize => pizzaSize.name === previousNewPizza.name)
         .pop();
 
@@ -74,13 +77,13 @@ const reducer
       let newPizza =
         assign
         ( {}
-        , state.get('newPizza')
+        , state.get('newPizza').toJS()
         , { basePrice
           , toppingsSelected
           }
         );
 
-      let newState = state.set('newPizza', newPizza);
+      let newState = state.set('newPizza', Immutable.fromJS(newPizza));
 
       return newState;
     }

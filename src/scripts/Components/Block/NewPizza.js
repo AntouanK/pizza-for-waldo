@@ -2,9 +2,12 @@
 'use strict';
 
 const React               = require('react');
+const assign              = require('object-assign');
 const CheckBox            = require('../Unit/CheckBox');
 const selectNewPizzaSize  = require('../../Actions/SelectNewPizzaSize');
 const selectNewTopping    = require('../../Actions/SelectNewTopping');
+const modifyCartItems     = require('../../Actions/ModifyCartItems');
+
 
 //  -------------------------------- styles
 const StyleNewPizza =
@@ -27,7 +30,34 @@ const StyleSection =
   { display: 'flex'
   , alignItems: 'center'
   };
+const StyleButton =
+  { backgroundColor: 'inherit'
+  , border: '1px solid #777'
+  , borderRadius: '3px'
+  , padding: '6px'
+  , boxShadow: '0 0 2px rgba(0,0,0,0.7)'
+  , cursor: 'pointer'
+  };
 //  --------------------------------
+
+const calculatePrice = ({ pizza, pizzaSizes }) =>
+  pizza.basePrice
+  + pizzaSizes
+    //  get the toppings for our size
+    .filter(size => size.name === pizza.name)
+    .pop()
+    .toppings
+    .map(toppingWrapper => toppingWrapper.topping)
+    //  keep only the ones selected
+    .filter(
+      topping => pizza.toppingsSelected.indexOf(topping.name) > -1
+    )
+    // pluck the prices
+    .map(topping => topping.price)
+    .reduce
+    ( (total, thisPrice) => total + thisPrice
+    , 0
+    );
 
 
 const NewPizza = React.createClass({
@@ -37,6 +67,23 @@ const NewPizza = React.createClass({
       )
     , pizzaSizes: React.PropTypes.array.isRequired }
     ,
+
+  handleAddToCart() {
+    let { newPizza, pizzaSizes } = this.props;
+    //  add the price to not calculate it again later
+    let price = calculatePrice({ pizza: newPizza, pizzaSizes });
+
+    modifyCartItems(
+      { item:
+          assign
+            ( {}
+            , newPizza
+            , { price }
+            )
+      , operation: 'ADD'
+      }
+    );
+  },
 
   render() {
     let { newPizza, pizzaSizes } = this.props;
@@ -129,24 +176,7 @@ const NewPizza = React.createClass({
       //  ----------------------------------------------  toppings section /
 
       //  ----------------------------------------------  price section
-      let price
-        = newPizza.basePrice
-        + pizzaSizes
-          //  get the toppings for our size
-          .filter(size => size.name === newPizza.name)
-          .pop()
-          .toppings
-          .map(toppingWrapper => toppingWrapper.topping)
-          //  keep only the ones selected
-          .filter(
-            topping => newPizza.toppingsSelected.indexOf(topping.name) > -1
-          )
-          // pluck the prices
-          .map(topping => topping.price)
-          .reduce
-          ( (total, thisPrice) => total + thisPrice
-          , 0
-          );
+      let price = calculatePrice({ pizza: newPizza, pizzaSizes });
 
       let priceSection = (
         <div
@@ -169,9 +199,22 @@ const NewPizza = React.createClass({
 
       //  ----------------------------------------------  add-it section
       let addItSection = (
-        <button>
-          {'add it to cart'}
-        </button>
+        <div
+          key='add-it-section'
+          style={StyleSection}
+        >
+          <div style={StyleSectionLabel}>
+            {'Hungry?'}
+          </div>
+          <div style={{ fontSize: '1.4em', lineHeight: '2em' }}>
+            <button
+              onClick={this.handleAddToCart}
+              style={StyleButton}
+            >
+              {'add it to cart'}
+            </button>
+          </div>
+        </div>
       );
       newPizzaContent.push(<hr key='add-it-separator' />);
       newPizzaContent.push(addItSection);
