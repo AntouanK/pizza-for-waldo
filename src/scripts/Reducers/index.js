@@ -22,6 +22,7 @@ const reducers =
   , require('./fetchPizzaData')
   , require('./selectNewPizzaSize')
   , require('./selectNewTopping')
+  , require('./modifyCartItems')
   ];
 
 module.exports = reducers;

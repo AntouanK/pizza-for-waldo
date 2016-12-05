@@ -5,6 +5,8 @@ const React               = require('react');
 const CheckBox            = require('../Unit/CheckBox');
 const selectNewPizzaSize  = require('../../Actions/SelectNewPizzaSize');
 const selectNewTopping    = require('../../Actions/SelectNewTopping');
+const modifyCartItems     = require('../../Actions/ModifyCartItems');
+
 
 //  -------------------------------- styles
 const StyleNewPizza =
@@ -27,6 +29,14 @@ const StyleSection =
   { display: 'flex'
   , alignItems: 'center'
   };
+const StyleButton =
+  { backgroundColor: 'inherit'
+  , border: '1px solid #777'
+  , borderRadius: '3px'
+  , padding: '6px'
+  , boxShadow: '0 0 2px rgba(0,0,0,0.7)'
+  , cursor: 'pointer'
+  };
 //  --------------------------------
 
 
@@ -37,6 +47,16 @@ const NewPizza = React.createClass({
       )
     , pizzaSizes: React.PropTypes.array.isRequired }
     ,
+
+  handleAddToCart() {
+    let item = this.props.newPizza;
+
+    modifyCartItems(
+      { item
+      , operation: 'ADD'
+      }
+    );
+  },
 
   render() {
     let { newPizza, pizzaSizes } = this.props;
@@ -169,9 +189,22 @@ const NewPizza = React.createClass({
 
       //  ----------------------------------------------  add-it section
       let addItSection = (
-        <button>
-          {'add it to cart'}
-        </button>
+        <div
+          key='add-it-section'
+          style={StyleSection}
+        >
+          <div style={StyleSectionLabel}>
+            {'Hungry?'}
+          </div>
+          <div style={{ fontSize: '1.4em', lineHeight: '2em' }}>
+            <button
+              onClick={this.handleAddToCart}
+              style={StyleButton}
+            >
+              {'add it to cart'}
+            </button>
+          </div>
+        </div>
       );
       newPizzaContent.push(<hr key='add-it-separator' />);
       newPizzaContent.push(addItSection);
