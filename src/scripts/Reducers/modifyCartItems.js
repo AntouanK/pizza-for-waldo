@@ -55,7 +55,7 @@ const reducer
         let newItems =
           Immutable.fromJS
             ( existingItems
-              .filter(thisItem => thisItem.id === idToRemove)
+              .filter(thisItem => thisItem.id !== idToRemove)
             );
 
         let newState = state.setIn(['cart', 'items'], newItems);

@@ -2,6 +2,7 @@
 'use strict';
 
 const React               = require('react');
+const assign              = require('object-assign');
 const CheckBox            = require('../Unit/CheckBox');
 const selectNewPizzaSize  = require('../../Actions/SelectNewPizzaSize');
 const selectNewTopping    = require('../../Actions/SelectNewTopping');
@@ -39,6 +40,25 @@ const StyleButton =
   };
 //  --------------------------------
 
+const calculatePrice = ({ pizza, pizzaSizes }) =>
+  pizza.basePrice
+  + pizzaSizes
+    //  get the toppings for our size
+    .filter(size => size.name === pizza.name)
+    .pop()
+    .toppings
+    .map(toppingWrapper => toppingWrapper.topping)
+    //  keep only the ones selected
+    .filter(
+      topping => pizza.toppingsSelected.indexOf(topping.name) > -1
+    )
+    // pluck the prices
+    .map(topping => topping.price)
+    .reduce
+    ( (total, thisPrice) => total + thisPrice
+    , 0
+    );
+
 
 const NewPizza = React.createClass({
   propTypes:
@@ -49,10 +69,17 @@ const NewPizza = React.createClass({
     ,
 
   handleAddToCart() {
-    let item = this.props.newPizza;
+    let { newPizza, pizzaSizes } = this.props;
+    //  add the price to not calculate it again later
+    let price = calculatePrice({ pizza: newPizza, pizzaSizes });
 
     modifyCartItems(
-      { item
+      { item:
+          assign
+            ( {}
+            , newPizza
+            , { price }
+            )
       , operation: 'ADD'
       }
     );
@@ -149,24 +176,7 @@ const NewPizza = React.createClass({
       //  ----------------------------------------------  toppings section /
 
       //  ----------------------------------------------  price section
-      let price
-        = newPizza.basePrice
-        + pizzaSizes
-          //  get the toppings for our size
-          .filter(size => size.name === newPizza.name)
-          .pop()
-          .toppings
-          .map(toppingWrapper => toppingWrapper.topping)
-          //  keep only the ones selected
-          .filter(
-            topping => newPizza.toppingsSelected.indexOf(topping.name) > -1
-          )
-          // pluck the prices
-          .map(topping => topping.price)
-          .reduce
-          ( (total, thisPrice) => total + thisPrice
-          , 0
-          );
+      let price = calculatePrice({ pizza: newPizza, pizzaSizes });
 
       let priceSection = (
         <div
