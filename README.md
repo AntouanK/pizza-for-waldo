@@ -19,7 +19,7 @@ you can checkout the `build-ready` branch, where the `/static` directory is
 already commited with the static files.
 ( for dev version )
 - start a server that can serve the `/static` directory.
-( for example, if you have python, go in the `/static/ directory and do 
+( for example, if you have python, go in the `/static/` directory and do 
 `python -m SimpleHTTPServer 8081` )
 
 
