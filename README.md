@@ -2,6 +2,7 @@
 # Pizza order demo
 
 Small app to solve the problem given.
+( live [demo](https://antouank.github.io/pizza-for-waldo/static/) )
 For this app we used :
 - React
 - Flux ( instead of Redux )
