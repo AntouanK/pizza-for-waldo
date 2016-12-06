@@ -3,6 +3,9 @@
 
 const types         = require('../Constants').Types;
 const appDispatcher = require('../Store/dispatcher');
+//  load a mock, in case of no internet connection
+const pizzaResponse = require('../../mocks/pizza-data.response.json');
+
 
 const query
   = `
@@ -59,9 +62,19 @@ const fetchPizzaData
       }
     })
     .catch(err => {
+      //  for the purposes of the demo, in case of an error 
+      //  we'll reply with a mocked response
+      appDispatcher.dispatch
+        ( { type: types.FETCH_PIZZA_DATA_SUCCESS
+          , data: pizzaResponse.data
+          }
+        );
+      
+      /*  normally, we would send back an error, like this:
       console.error(err);
       appDispatcher.dispatch
         ( { type: types.FETCH_PIZZA_DATA_FAILURE } );
+      */
     });
   };
 
