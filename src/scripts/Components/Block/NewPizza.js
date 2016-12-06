@@ -121,14 +121,15 @@ const NewPizza = React.createClass({
 
     if(newPizza.name !== undefined){
       //  ----------------------------------------------  toppings section
-      let toppingsElements =
+      let myPizzaSize =
         pizzaSizes
         //  keep only the size we selected
         .filter(pizzaSize => pizzaSize.name === newPizza.name)
-        //  pluck the .toppings
-        .map(pizzaSize => pizzaSize.toppings)
-        //  pop the Array
-        .pop()
+        .pop();
+
+      let toppingsElements =
+        myPizzaSize
+        .toppings
         //  iterate over the toppings to make CheckBoxes
         .map(toppingWrapper => {
           let topping = toppingWrapper.topping;
@@ -138,6 +139,14 @@ const NewPizza = React.createClass({
             .filter(toppingName => toppingName === topping.name)
             .pop()
             !== undefined;
+
+          //  disable the checkbox if we reached the max toppings
+          //  and it's not checked already
+          let isDisabled 
+            =   !isChecked
+            &&  myPizzaSize.maxToppings !== null
+            &&  myPizzaSize.maxToppings <= newPizza.toppingsSelected.length;
+
           let changeHandler =
             () =>
               selectNewTopping(
@@ -145,10 +154,11 @@ const NewPizza = React.createClass({
                 , select: !isChecked
                 }
               );
-
+            
           return (
             <CheckBox
               checked={isChecked}
+              disabled={isDisabled}
               key={topping.name}
               label={`${topping.name} (${topping.price.toFixed(2)}$)`}
               onChange={changeHandler}

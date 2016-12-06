@@ -61,7 +61,7 @@ const fetchPizzaData
         );
       }
     })
-    .catch(err => {
+    .catch((/*err*/) => {
       //  for the purposes of the demo, in case of an error 
       //  we'll reply with a mocked response
       appDispatcher.dispatch
