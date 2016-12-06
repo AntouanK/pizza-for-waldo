@@ -25,6 +25,7 @@ const StyleCheckboxesSection =
   { display: 'flex'
   , flexWrap: 'wrap'
   , lineHeight: '2em'
+  , justifyContent: 'space-between'
   };
 const StyleSection =
   { display: 'flex'
