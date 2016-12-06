@@ -40,7 +40,7 @@ const StylePizzaTopping =
   };
 const StyleXIcon =
   { cursor: 'pointer'
-  , fontSize: '18px'
+  , fontSize: '16px'
   , border: '1px solid #555'
   , borderRadius: '3px'
   , width: '22px'
