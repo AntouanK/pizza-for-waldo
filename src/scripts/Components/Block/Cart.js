@@ -31,6 +31,7 @@ const StylePizzaToppings =
   { fontSize: '22px'
   , display: 'flex'
   , alignItems: 'center'
+  , flexWrap: 'wrap'
   };
 const StylePizzaTopping =
   { display: 'inline-block'
