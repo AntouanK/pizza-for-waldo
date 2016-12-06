@@ -1,0 +1,22 @@
+{
+  "name": "pizza-for-waldo",
+  "version": "1.0.0",
+  "description": "Waldo needs some pizza.",
+  "main": "index.js",
+  "author": "Antonis Karamitros @antouank <ablackjim228@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "browserify": "^13.1.1",
+    "consologger": "^1.1.0",
+    "eslint": "^3.11.1",
+    "eslint-plugin-react": "^6.7.1",
+    "flux": "^3.1.0",
+    "immutable": "^3.8.1",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "reactify": "^1.1.1"
+  },
+  "scripts": {
+    "watcher": "watch-node 'clear && GIT_VERSION=$(git describe --tags) NODE_ENV=dev make' ./src"
+  }
+}
